@@ -25,6 +25,8 @@ authRoutes.post('/signup', (req, res, next) => {
     return;
   }
 
+  // Check password length, characters, etc. (we are ignoring that here)
+
   User.findOne(
     // 1st arg -> criteria of the findOne (which documents)
     { username: signupUsername },
@@ -44,6 +46,30 @@ authRoutes.post('/signup', (req, res, next) => {
         });
         return;
       }
+
+      // We are good to go, time to save the user.
+
+      // Encrypt the password
+      const salt = bcrypt.genSaltSync(10);
+      const hashPass = bcrypt.hashSync(signupPassword, salt);
+
+      // Create the user
+      const theUser = new User({
+        name: req.body.signupName,
+        username: signupUsername,
+        encryptedPassword: hashPass
+      });
+
+      // Save it
+      theUser.save((err) => {
+        if (err) {
+          next(err);
+          return;
+        }
+
+        // Redirect to home page if save is successful
+        res.redirect('/');
+      });
     }
   );
 });
