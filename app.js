@@ -151,6 +151,9 @@ app.use('/', index);
 
 const myAuthRoutes = require('./routes/auth-routes.js');
 app.use('/', myAuthRoutes);
+
+const myUserRoutes = require('./routes/user-routes.js');
+app.use('/', myUserRoutes);
 // ----------------------------------------------------------
 
 
