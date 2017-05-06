@@ -43,6 +43,12 @@ app.use(passport.session());
 // ... and BEFORE our routes
 
 
+// PASSPORT GOES THROUGH THIS
+  // 1. Our form
+  // 2. LocalStrategy callback
+  // 3. (if successful) passport.serializeUser()
+
+
 // Determines WHAT TO SAVE in the session (what to put in the box)
 // (called when you log in)
 passport.serializeUser((user, cb) => {
@@ -69,6 +75,61 @@ passport.deserializeUser((userId, cb) => {
     cb(null, theUser);
   });
 });
+
+
+const LocalStrategy = require('passport-local').Strategy;
+// The same as:
+// const passportLocal = require('passport-local');
+// const LocalStrategy = passportLocal.Strategy;
+
+const bcrypt = require('bcrypt');
+
+
+passport.use( new LocalStrategy(
+  // 1st arg -> options to customize LocalStrategy
+  {
+      // <input name="loginUsername">
+    usernameField: 'loginUsername',
+      // <input name="loginPassword">
+    passwordField: 'loginPassword'
+  },
+
+  // 2nd arg -> callback for the logic that validates the login
+  (loginUsername, loginPassword, next) => {
+    User.findOne(
+      { username: loginUsername },
+
+      (err, theUser) => {
+        // Tell passport if there was an error (nothing we can do)
+        if (err) {
+          next(err);
+          return;
+        }
+
+        // Tell passport if there is no user with given username
+        if (!theUser) {
+            //       false in 2nd arg means "Log in failed!"
+            //         |
+          next(null, false);
+          return;
+        }
+
+        // Tell passport if the passwords don't match
+        if (!bcrypt.compareSync(loginPassword, theUser.encryptedPassword)) {
+            //       false in 2nd arg means "Log in failed!"
+            //         |
+          next(null, false);
+          return;
+        }
+
+        // Give passport the user's details (SUCCESS!)
+        next(null, theUser);
+          // -> this user goes to passport.serializeUser()
+      }
+    );
+  }
+) );
+
 
 
 
