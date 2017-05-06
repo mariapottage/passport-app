@@ -42,6 +42,17 @@ app.use(passport.initialize());
 app.use(passport.session());
 // ... and BEFORE our routes
 
+// This middleware sets the user variable for all views
+// (only if logged in)
+//   user: req.user     for all renders!
+app.use((req, res, next) => {
+  if (req.user) {
+    res.locals.user = req.user;
+  }
+
+  next();
+});
+
 
 // PASSPORT GOES THROUGH THIS
   // 1. Our form
@@ -100,13 +111,13 @@ passport.use( new LocalStrategy(
       { username: loginUsername },
 
       (err, theUser) => {
-        // Tell passport if there was an error (nothing we can do)
+        // Tell Passport if there was an error (nothing we can do)
         if (err) {
           next(err);
           return;
         }
 
-        // Tell passport if there is no user with given username
+        // Tell Passport if there is no user with given username
         if (!theUser) {
             //       false in 2nd arg means "Log in failed!"
             //         |
@@ -114,7 +125,7 @@ passport.use( new LocalStrategy(
           return;
         }
 
-        // Tell passport if the passwords don't match
+        // Tell Passport if the passwords don't match
         if (!bcrypt.compareSync(loginPassword, theUser.encryptedPassword)) {
             //       false in 2nd arg means "Log in failed!"
             //         |
@@ -122,7 +133,7 @@ passport.use( new LocalStrategy(
           return;
         }
 
-        // Give passport the user's details (SUCCESS!)
+        // Give Passport the user's details (SUCCESS!)
         next(null, theUser);
           // -> this user goes to passport.serializeUser()
       }

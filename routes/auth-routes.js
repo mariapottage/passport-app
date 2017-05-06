@@ -89,5 +89,12 @@ authRoutes.post('/login',
   } )
 );
 
+authRoutes.get('/logout', (req, res, next) => {
+  // req.logout() method provided by Passport
+  req.logout();
+
+  res.redirect('/');
+});
+
 
 module.exports = authRoutes;
