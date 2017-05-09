@@ -87,6 +87,14 @@ authRoutes.post('/signup',
             return;
           }
 
+          // Store a message in the box to display after the redirect
+          req.flash(
+            // 1st arg -> key of message
+            'successfulSignup',
+            // 2nd arg -> the actual message
+            'You have registered successfully!'
+          );
+
           // Redirect to home page if save is successful
           res.redirect('/');
         });

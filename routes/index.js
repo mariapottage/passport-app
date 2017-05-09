@@ -19,7 +19,10 @@ router.get('/', (req, res, next) => {
   //   res.render('index');
   // }
 
-  res.render('index');
+  res.render('index', {
+    // user: req.user,
+    successMessage: req.flash('successfulSignup')
+  });
 });
 
 module.exports = router;
