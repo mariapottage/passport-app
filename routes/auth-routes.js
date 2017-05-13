@@ -148,5 +148,27 @@ authRoutes.get('/logout', (req, res, next) => {
   res.redirect('/');
 });
 
+//                                                  facebook as in 'FbStrategy'
+//                                                        \
+authRoutes.get('/auth/facebook', passport.authenticate('facebook'));
+//                  \
+// Link to this address to log in with Facebook
+
+//where Facebook goes back after the user has accepted/rejected
+//callbackURL: 'auth/facebook/callback'
+authRoutes.get('/auth/facebook/callback', passport.authenticate('facebook', {
+  successRedirect: '/',
+  failureRedirect: '/login'
+}));
+
+authRoutes.get('/auth/google', passport.authenticate('google', {
+  scope: ["https://www.googleapis.com/auth/plus.login",
+          "https://www.googleapis.com/auth/plus.profile.emails.read"]
+}));
+
+authRoutes.get('/auth/google/callback', passport.authenticate('google', {
+  successRedirect: '/',
+  failureRedirect: '/login'
+}));
 
 module.exports = authRoutes;
