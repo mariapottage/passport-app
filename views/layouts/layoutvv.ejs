@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+  </head>
+  <body>
+    <header>
+      <h1> Paperplane App</h1>
+
+      <nav>
+        <ul>
+          <li> <a href="/"> Home </a> </li>
+
+          <% if (typeof user !== 'undefined') { %>
+
+<<<<<<< HEAD:views/layouts/layoutvv.ejs
+<<<<<<< HEAD:views/layouts/layoutvv.ejs
+<<<<<<< HEAD:views/layouts/layoutvv.ejs
+<<<<<<< HEAD:views/layouts/layoutvv.ejs
+            <li> <a href="/notes"> Notes </a> </li>
+=======
+>>>>>>> parent of 6b29638... deploy version:views/layout.ejs
+=======
+>>>>>>> parent of 6b29638... deploy version:views/layout.ejs
+=======
+>>>>>>> parent of 6b29638... deploy version:views/layout.ejs
+=======
+>>>>>>> parent of 6b29638... deploy version:views/layout.ejs
+            <li> <a href="/profile/edit"> Edit Profile </a> </li>
+            <li> <a href="/logout"> Log Out </a> </li>
+
+          <% } else { %>
+
+            <li> <a href="/signup"> Sign Up </a> </li>
+            <li> <a href="/login"> Log In </a> </li>
+
+          <% } %>
+        </ul>
+      </nav>
+    </header>
+
+    <%- body %>
+
+    <footer>
+      <p> Made with &hearts; by Maria Pottage at Ironhack. </p>
+    </footer>
+  </body>
+</html>

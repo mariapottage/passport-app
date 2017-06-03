@@ -13,7 +13,9 @@ router.get('/rooms/new',
 ensure.ensureLoggedIn('/login'),
 
 (req, res, next) => {
-  res.render('rooms/new-room-view.ejs');
+  res.render('notes/new-room-view.ejs', {
+    layout:"layouts/layout-home"
+  });
 }
 );
 
@@ -22,7 +24,7 @@ const myUploader = multer({
 });
 
 // form method post
-router.post('/rooms',
+router.post('/notes',
 //we need to be logged in to create rooms
   ensure.ensureLoggedIn('/login'),
 
@@ -50,13 +52,13 @@ theRoom.save((err)=> {
   }
   req.flash('success', 'Your room was saved successfully');
 
-  res.redirect('/rooms');
+  res.redirect('/notes');
 });
   }
 );
 
 
-router.get('/rooms', ensure.ensureLoggedIn(),
+router.get('/notes', ensure.ensureLoggedIn(),
 (req, res, next) => {
   Room.find(
     { owner: req.user._id },
@@ -68,7 +70,8 @@ router.get('/rooms', ensure.ensureLoggedIn(),
 
       // if (roomsList.length > 0) {
 
-      res.render('rooms/rooms-list-view.ejs', {
+      res.render('notes/rooms-list-view.ejs', {
+        layout:"layouts/layout-home",
         rooms: roomsList,
         successMessage: req.flash('success')
       });

@@ -22,7 +22,9 @@ authRoutes.get('/signup',
     //   return;
     // }
 
-    res.render('auth/signup-view.ejs');
+    res.render('auth/signup-view.ejs', {
+      layout:"layouts/layout-register.ejs"
+    });
   }
 );
 
@@ -40,6 +42,7 @@ authRoutes.post('/signup',
     // Don't let users submit blank usernames or passwords
     if (signupUsername === '' || signupPassword === '') {
       res.render('auth/signup-view.ejs', {
+        layout:"layouts/layout-register.ejs",
         errorMessage: 'Please provide both username and password.'
       });
       return;
@@ -62,6 +65,7 @@ authRoutes.post('/signup',
         // Don't let the user register if the username is taken
         if (foundUser) {
           res.render('auth/signup-view.ejs', {
+            layout:"layouts/layout-register.ejs",
             errorMessage: 'Username is taken, sir or madam.'
           });
           return;
@@ -117,6 +121,7 @@ authRoutes.get('/login',
     // }
 
     res.render('auth/login-view.ejs', {
+      layout:"layouts/layout-register.ejs",
       errorMessage: req.flash('error')
         //                       |
     }); //    default name for error messages in Passport
@@ -148,27 +153,5 @@ authRoutes.get('/logout', (req, res, next) => {
   res.redirect('/');
 });
 
-//                                                  facebook as in 'FbStrategy'
-//                                                        \
-authRoutes.get('/auth/facebook', passport.authenticate('facebook'));
-//                  \
-// Link to this address to log in with Facebook
-
-//where Facebook goes back after the user has accepted/rejected
-//callbackURL: 'auth/facebook/callback'
-authRoutes.get('/auth/facebook/callback', passport.authenticate('facebook', {
-  successRedirect: '/',
-  failureRedirect: '/login'
-}));
-
-authRoutes.get('/auth/google', passport.authenticate('google', {
-  scope: ["https://www.googleapis.com/auth/plus.login",
-          "https://www.googleapis.com/auth/plus.profile.emails.read"]
-}));
-
-authRoutes.get('/auth/google/callback', passport.authenticate('google', {
-  successRedirect: '/',
-  failureRedirect: '/login'
-}));
 
 module.exports = authRoutes;
